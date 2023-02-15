@@ -18,21 +18,14 @@
   <img src="https://img.shields.io/badge/Deploy-Docker-blueviolet">
 </p>
 
- <div class="container">
+ <div>
       <h1>Всем привет, я <a href="https://www.gilmanov.net/" target="_blank">Константин</a> <img src="https://github.com/blackcater/blackcater/raw/main/images/Hi.gif" height="32"/></h1>
       <h3>Этот репозиторий содержит решение тестового задания по созданию Django + Stripe API бэкенда.</h3>
-     <div class="steps">
   <center>
-    <a href="https://stripeapi.pythonanywhere.com/" style="text-decoration:none;">
-      <div style="display:inline-block; background-color:#C7D2FE; padding:10px 20px; border-radius:5px; box-shadow:2px 2px 4px #888888; transition:all 0.2s ease;">
-        <img src="https://img.icons8.com/color/48/000000/stripe.png" width="32" height="32" alt="Stripe icon" style="margin-right:10px; vertical-align:middle;">
-        <span style="color:#2B2D42; font-size:1.2em; vertical-align:middle;">DEMO</span>
-      </div>
-    </a>
-  </center>
-</div>
+<a href="https://stripeapi.pythonanywhere.com/" style="display: inline-block; background-color: #1e88e5; color: #ffffff; padding: 12px 24px; border-radius: 5px; text-decoration: none; font-size: 18px; font-weight: bold; text-align: center;">DEMO</a>
+</center>
 
-  <h4>Установка и запуск <img src="https://github.githubassets.com/images/icons/emoji/rocket.png" height="30"/></h4>
+<h4>Установка и запуск <img src="https://github.githubassets.com/images/icons/emoji/rocket.png" height="30"/></h4>
   <p>Чтобы запустить приложение локально, выполните следующие шаги:</p>
   <ol>
     <li>Клонируйте репозиторий: <code>git clone https://github.com/ConsttsnoC/ConsttsnoC-Django-StripeAPI.git</code></li>
