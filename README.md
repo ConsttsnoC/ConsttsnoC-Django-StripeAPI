@@ -1,1 +1,0 @@
-# ConsttsnoC-Django-StripeAPI

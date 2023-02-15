@@ -14,6 +14,14 @@ YOUR_DOMAIN = "http://127.0.0.1:8000"
 
 
 def buy_order(request, order_pk):
+    """
+        Создает новую сессию оплаты Stripe для заказа с указанным primary key.
+        Параметры:
+            - request: HttpRequest объект
+            - order_pk: int, primary key заказа
+
+        Возвращает JsonResponse объект со значением session_id созданной сессии оплаты Stripe.
+        """
     order = get_object_or_404(Order, pk=order_pk)
 
     line_items = []
@@ -45,6 +53,14 @@ def buy_order(request, order_pk):
 
 
 def buy(request, item_pk):
+    """
+        Создает новый объект платежа Stripe (PaymentIntent) для товара с указанным primary key.
+        Параметры:
+            - request: HttpRequest объект
+            - item_pk: int, primary key товара
+
+        Возвращает JsonResponse объект со значением payment_intent созданного объекта платежа Stripe.
+        """
     item = get_object_or_404(Item, pk=item_pk)
     total_amount = int(item.total() * 100)
 
@@ -66,20 +82,56 @@ def buy(request, item_pk):
     return JsonResponse({'payment_intent': payment_intent})
 
 def checkout(request):
+    """
+        Отображает страницу оформления заказа, на которой пользователь может выбрать товары для покупки.
+        Параметры:
+            - request: HttpRequest объект
+
+        Возвращает HttpResponse объект со страницей оформления заказа.
+        """
     items = Item.objects.all()
     return render(request, 'checkout.html', {'items': items})
 
 def success(request):
+    """
+        Отображает страницу успешной оплаты.
+        Параметры:
+            - request: HttpRequest объект
+
+        Возвращает HttpResponse объект со страницей успешной оплаты.
+        """
     return render(request, 'success.html')
 
 def cancel(request):
+    """
+        Отображает страницу отмены оплаты.
+        Параметры:
+            - request: HttpRequest объект
+
+        Возвращает HttpResponse объект со страницей отмены оплаты.
+        """
     return render(request, 'cancel.html')
 
 def item(request, item_pk):
+    """
+        Отображает страницу товара с указанным primary key.
+        Параметры:
+            - request: HttpRequest объект
+            - item_pk: int, primary key товара
+
+        Возвращает HttpResponse объект со страницей товара.
+        """
     item = get_object_or_404(Item, pk=item_pk)
     return render(request, 'item.html', {'item': item, "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY})
 
 def create_order(request):
+    """
+       Создает новый заказ на основе выбранных товаров и сохраняет его в базу данных.
+       Параметры:
+           - request: HttpRequest объект
+
+       Возвращает JsonResponse объект со значением order_id созданного заказа.
+       """
     selected_item_ids = (request.POST['selectedItems']).split(',')
     try:
         if (request.POST['selectedItems']):
@@ -103,6 +155,14 @@ def create_order(request):
 
 
 def get_order(request, order_pk):
+    """
+        Отображает страницу заказа с указанным primary key.
+        Параметры:
+            - request: HttpRequest объект
+            - order_pk: int, primary key заказа
+
+        Возвращает HttpResponse объект со страницей заказа.
+        """
     order = get_object_or_404(Order, pk=order_pk)
     total_price = 0
     for item in order.items.all():

@@ -1,7 +1,41 @@
 from django.db import models
 
 
-'''Класс Item определяет таблицу в базе данных с тремя полями: name, description и price'''
+"""
+Модели для управления товарами, заказами, скидками и налогами.
+
+Class Item:
+    Модель товара с полями:
+    - name: название товара
+    - description: описание товара
+    - price: цена товара
+    - discount_item: связь с моделью скидок Discount, по умолчанию null и blank
+    - tax_item: связь с моделью налогов Tax, по умолчанию null и blank
+    - currency: валюта товара
+
+    Методы:
+    - discounted_price: возвращает цену товара со скидкой, если присутствует
+    - tax: возвращает сумму налога для данного товара
+    - total: возвращает общую стоимость товара с учетом скидки и налога
+
+Class Order:
+    Модель заказа с полями:
+    - items: связь многие-ко-многим с моделью Item
+    - total_price: общая стоимость заказа
+    - discounted_price: общая стоимость заказа со скидкой
+    - currency: валюта заказа
+
+Class Discount:
+    Модель скидки с полями:
+    - name: название скидки
+    - value: размер скидки в процентах
+
+Class Tax:
+    Модель налога с полями:
+    - name: название налога
+    - value: размер налога в процентах
+"""
+
 class Item(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -26,10 +60,6 @@ class Item(models.Model):
 
     def total(self):
         return self.discounted_price() + self.tax()
-
-
-
-
 
 class Order(models.Model):
     items = models.ManyToManyField(Item)
