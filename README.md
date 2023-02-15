@@ -1,7 +1,7 @@
 <!-- Заголовок -->
 <h1 align="center">
   <br>
-  Простое Django-приложение с использованием Stripe API
+   Django-приложение с использованием Stripe API
   <br>
 </h1>
 <!-- Описание -->
@@ -21,8 +21,8 @@
  <div>
       <h1>Всем привет, я <a href="https://www.gilmanov.net/" target="_blank">Константин</a> <img src="https://github.com/blackcater/blackcater/raw/main/images/Hi.gif" height="32"/></h1>
       <h3>Этот репозиторий содержит решение тестового задания по созданию Django + Stripe API бэкенда.</h3>
-  <center>
-<a href="https://stripeapi.pythonanywhere.com/" style="display: inline-block; background-color: #1e88e5; color: #ffffff; padding: 12px 24px; border-radius: 5px; text-decoration: none; font-size: 18px; font-weight: bold; text-align: center;">DEMO</a>
+     <center>
+<a href="https://stripeapi.pythonanywhere.com/" style="display: inline-block; background-color: #2f363d; color: #ffffff; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-size: 16px; font-weight: bold; text-align: center;">DEMO VERSION</a>
 </center>
 
 <h4>Установка и запуск <img src="https://github.githubassets.com/images/icons/emoji/rocket.png" height="30"/></h4>
