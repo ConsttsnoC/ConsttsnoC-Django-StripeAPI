@@ -21,6 +21,8 @@ STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 
 # Application definition
 
+ALLOWED_HOSTS = []
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
