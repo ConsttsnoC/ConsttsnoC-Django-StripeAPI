@@ -6,5 +6,10 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/web_django
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - STRIPE_PUBLIC_KEY=${STRIPE_PUBLIC_KEY}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - DEBUG=${DEBUG}
     ports:
       - '8000:8000'
