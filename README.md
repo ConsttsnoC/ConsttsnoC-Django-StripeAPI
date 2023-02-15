@@ -22,7 +22,7 @@
       <h1>Всем привет, я <a href="https://www.gilmanov.net/" target="_blank">Константин</a> <img src="https://github.com/blackcater/blackcater/raw/main/images/Hi.gif" height="32"/></h1>
       <h3>Этот репозиторий содержит решение тестового задания по созданию Django + Stripe API бэкенда.</h3>
    <center>
-<a href="https://stripeapi.pythonanywhere.com/" style="display: inline-block; background-color: #2f363d; color: #000000; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-size: 18px; font-weight: bold; text-align: center;">DEMO VERSION</a>
+<a href="https://stripeapi.pythonanywhere.com/">DEMO VERSION</a>
 </center>
 
 <h4>Установка и запуск <img src="https://github.githubassets.com/images/icons/emoji/rocket.png" height="30"/></h4>
@@ -41,7 +41,7 @@
 <li>Откройте браузер и перейдите по адресу <a href="http://localhost:8000/"></a>http://localhost:8000/
 </ol>
 
-<h4>Docker <img src="https://github.githubassets.com/images/icons/emoji/rocket.png" height="30"/></h4>
+<h4><img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" height="30"/> </h4>
 <p>Чтобы запустить приложение через Docker, выполните следующие шаги:</p>
 <ol>
 <li>Загрузите и установите <a href="https://www.docker.com/products/docker-desktop/">Docker</a></li>
