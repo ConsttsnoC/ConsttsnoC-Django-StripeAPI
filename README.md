@@ -12,8 +12,8 @@
 </p>
 <!-- Иконки -->
 <p align="center">
-  <img src="https://img.shields.io/badge/Django-3.2.7-green">
-  <img src="https://img.shields.io/badge/Python-3.10.7django-blue">
+  <img src="https://img.shields.io/badge/Django-4.1.6-green">
+  <img src="https://img.shields.io/badge/Python-3.10.7-blue">
   <img src="https://img.shields.io/badge/Stripe-API-orange">
   <img src="https://img.shields.io/badge/Deploy-Docker-blueviolet">
 </p>
