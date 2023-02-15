@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Интернет-магазин</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'checkout' %}">Интернет-магазин</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'checkout' %}">Каталог</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.gilmanov.net/">О нас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.gilmanov.net/static/portfolio/res.ko.pdf">Контакты</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+{% block content %} {% endblock %}
+<footer class="fixed-bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <p>&copy; 2023 Интернет-магазин</p>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
+<style>
+    .container {
+        max-width: 1120px;
+        margin: 0 auto;
+    }
+</style>

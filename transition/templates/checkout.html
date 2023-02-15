@@ -1,0 +1,261 @@
+{% extends './base.html' %}
+{% block content %}
+<main style="display: flex;flex-wrap: wrap">
+    <div class="cart-container">
+        <div class="cart-block">
+            <h3>Корзина</h3>
+            <ul id="cart-items"></ul>
+            <p id="cart-total">Итого: <span id="cart-total-value">0</span><span id="cart-total-currency"></span></p>
+            <button id="create-order-button" class="btn btn-success" onclick="createOrder()">Сделать заказ</button>
+        </div>
+    </div>
+    <div class="container">
+        <h1 class="text-center">Каталог товаров</h1>
+        <div class="row">
+            {% for item in items %}
+            <div class="col-md-4 mb-4 display-flex">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{% url 'item' item.id %}">{{ item.name }}</a></h5>
+                        <p class="card-text">{{ item.description }}</p>
+                        {% if item.discount_item %}
+                        <p class="card-text">Цена:
+                            <span class="price-with-discount">{{ item.price }}</span> {{ item.currency }}
+                        </p>
+                        <p class="card-text">Скидка: <span class="discount">{{ item.discount_item.value }} % </span></p>
+                        {% else %}
+                        <p class="card-text">Цена: {{ item.price }} {{ item.currency }}</p>
+                        {% endif %}
+                        {% if item.tax_item %}
+                        <p class="card-text">Налог: {{ item.tax_item }} {{ item.currency }}</p>
+                        {% endif %}
+                        {% if item.discount_item or item.tax_item %}
+                        <p class="card-text">Итоговая цена: {{ item.total }} {{ item.currency }}</p>
+                        {% endif %}
+                        <div class="form-group">
+                            <button type="button" id="add-button_{{item.id}}" class="btn btn-primary"
+                                    onclick="addToCart('{{ item.id }}', '{{ item.name }}','{{ item.total }}', '{{ item.currency }}')">
+                                Добавить
+                                в корзину
+                            </button>
+                            <button type="button" style="display: none" id="remove-button_{{item.id}}"
+                                    class="btn btn-danger"
+                                    onclick="removeOnCard('{{ item.id }}')">Удалить из корзины
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="modal" id="error-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ошибка</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="error-message"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    const createOrderButton = document.getElementById("create_order");
+    const errorEl = document.getElementById("error_message");
+    const csrftoken = '{{csrf_token}}';
+
+    let selectedItems = [];
+
+    function addToCart(id, name, price, currency) {
+
+        if (selectedItems.some(item => item.currency !== currency)) {
+            showErrorModal("Нельзя добавлять товары с ценой в разных валютах");
+        } else {
+            const addButtonEl = document.getElementById(`add-button_${id}`);
+            const removeButtonEl = document.getElementById(`remove-button_${id}`);
+
+            selectedItems.push({id, name, price, currency});
+            renderCardItem();
+
+
+            addButtonEl.style.display = "none";
+            removeButtonEl.style.display = "block";
+        }
+
+    }
+
+    function removeOnCard(id) {
+        const addButtonEl = document.getElementById(`add-button_${id}`);
+        const removeButtonEl = document.getElementById(`remove-button_${id}`);
+
+        selectedItems = selectedItems.filter(item => item.id !== id);
+        renderCardItem();
+
+        addButtonEl.style.display = "block";
+        removeButtonEl.style.display = "none";
+    }
+
+    function createOrder() {
+        const items = selectedItems.map(item => item.id);
+        let data = new FormData();
+        data.append("selectedItems", items);
+
+        fetch('create_order', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            body: data,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.order_id) {
+                    window.location = "order/" + data.order_id
+                } else {
+                    return Promise.reject(data);
+                }
+            })
+            .catch(data => {
+                showErrorModal(data.error_message);
+            });
+    }
+
+    function renderCardItem() {
+        let cartList = document.getElementById("cart-items");
+        let cartTotal = document.getElementById("cart-total-value");
+        let cartCurrency = document.getElementById("cart-total-currency");
+        let createOrderButton = document.getElementById("create-order-button");
+        createOrderButton.disabled = !selectedItems.length;
+
+        cartList.innerHTML = "";
+        cartTotal.innerHTML = getTotal();
+        selectedItems.forEach(function (item) {
+            let li = document.createElement("li");
+            li.innerHTML = item.name + " - " + item.price + " " + item.currency;
+            cartList.appendChild(li);
+        });
+
+        cartCurrency.innerHTML = selectedItems.length > 0 ? " " + selectedItems[0].currency : " usd";
+    }
+
+    function getTotal() {
+        let total = 0;
+
+        selectedItems.forEach(function (item) {
+            total += parseFloat(item.price);
+        });
+
+        return total;
+    }
+
+
+    function showErrorModal(message) {
+        const modal = document.getElementById('error-modal');
+        const modalContent = modal.querySelector('.modal-content');
+        const errorMessage = document.getElementById('error-message');
+
+        errorMessage.textContent = message;
+        modal.style.display = 'block';
+        modalContent.querySelector('.close').addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
+        window.addEventListener('click', function (event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+</script>
+
+
+    <style>
+        /* Дополнительные стили */
+        .card-text {
+            margin-bottom: 10px;
+        }
+
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .cart-block {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-items: stretch;
+        }
+
+        .card {
+            margin-bottom: 20px;
+        }
+
+        .display-flex {
+            display: flex;
+            flex: 0 1;
+            justify-content: space-between;
+        }
+
+        /* Новые стили */
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f5f5f5;
+            padding: 10px 0;
+        }
+
+        .price-with-discount {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .discount {
+            color: red;
+            font-weight: bold;
+        }
+
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+
+        .cart-container {
+            float: right;
+            margin-top: 20px;
+            margin-left: 20px;
+            width: 250px;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .cart-container h3 {
+            margin-top: 0;
+        }
+
+        .cart-container ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .cart-container li {
+            margin-bottom: 5px;
+        }
+
+        .cart-container button {
+            float: right;
+        }
+    </style>
+{% endblock %}

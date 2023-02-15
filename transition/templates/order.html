@@ -1,0 +1,102 @@
+{% extends './base.html' %}
+{% block content %}
+<style>
+    .wrapper {
+        width: 80%;
+        margin: 0 auto;
+        background-color: #fff;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        margin-bottom: 5px;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container">
+    <div class="wrapper">
+        <h1>Заказ №{{order.pk}}</h1>
+        <ul>
+            {% for item in items %}
+            <hr>
+            <li><b>{{ item.name }}</b> - {{ item.price }} {{ item.currency }}</li>
+            {% if item.tax_item %}
+            <li><b>Налог на товар:</b> {{ item.tax_item }}</li>
+            {% endif %}
+            {% if item.discount_item.value %}
+            {% if item.tax_item %}
+            <li><b>ИТОГ с учётом налога и скидки:</b> {{ item.total }} {{ item.currency }}</li>
+            {% else %}
+            <li><b>ИТОГ с учётом скидки:</b> {{ item.total }} {{ item.currency }}</li>
+            {% endif %}
+            {% elif item.tax_item %}
+            <li>ИТОГ с учётом налога: {{ item.total }} {{ item.currency }}</li>
+            {% endif %}
+            {% endfor %}
+            <hr>
+            <li><strong>Общая сумма: {{ total }} {{ item.currency }}</strong></li>
+        </ul>
+
+        <button id="bay-button">Купить</button>
+    </div>
+
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const csrftoken = '{{csrf_token}}';
+    const orderId = '{{ order.id }}';
+    const stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const buyButton = document.getElementById('bay-button');
+
+        buyButton.addEventListener('click', () => {
+            fetch(`/buy_order/${orderId}`, {
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': csrftoken
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const {session_id} = data;
+
+                    stripe.redirectToCheckout({sessionId: session_id});
+                });
+        });
+    });
+</script>
+{% endblock %}
