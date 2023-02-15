@@ -36,13 +36,26 @@ Class Tax:
     - value: размер налога в процентах
 """
 
+
 class Item(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     price = models.IntegerField(default=0)
-    discount_item = models.ForeignKey('Discount', on_delete=models.SET_NULL, null=True, blank=True,related_name='item_discounts_set')
-    tax_item = models.ForeignKey('Tax', on_delete=models.SET_NULL, null=True, blank=True, related_name='item_taxes_set')
-    currency = models.CharField(max_length=3, choices=(('usd', 'USD'), ('eur', 'EUR')))
+    discount_item = models.ForeignKey(
+        'Discount',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='item_discounts_set')
+    tax_item = models.ForeignKey(
+        'Tax',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='item_taxes_set')
+    currency = models.CharField(
+        max_length=3, choices=(
+            ('usd', 'USD'), ('eur', 'EUR')))
 
     def __str__(self):
         return self.name
@@ -61,14 +74,17 @@ class Item(models.Model):
     def total(self):
         return self.discounted_price() + self.tax()
 
+
 class Order(models.Model):
     items = models.ManyToManyField(Item)
     total_price = models.IntegerField(default=0)
     discounted_price = models.IntegerField(default=0)
-    currency = models.CharField(max_length=3, choices=(('usd', 'USD'), ('eur', 'EUR')), default='usd')
+    currency = models.CharField(max_length=3, choices=(
+        ('usd', 'USD'), ('eur', 'EUR')), default='usd')
 
     def __str__(self):
         return self.name
+
 
 class Discount(models.Model):
     name = models.CharField(max_length=100)
@@ -84,5 +100,3 @@ class Tax(models.Model):
 
     def __str__(self):
         return self.name
-
-

@@ -1,12 +1,9 @@
 import stripe
 from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
-from django.urls import reverse
-from django.http import HttpResponse
-from .models import Item,Order
-from django.http import JsonResponse, HttpResponseNotFound
-from django.db.models import Sum
-import json
+from .models import Item, Order
+from django.http import JsonResponse
+
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -50,8 +47,6 @@ def buy_order(request, order_pk):
     return JsonResponse({'session_id': checkout_session.id})
 
 
-
-
 def buy(request, item_pk):
     """
         Создает новый объект платежа Stripe (PaymentIntent) для товара с указанным primary key.
@@ -81,6 +76,7 @@ def buy(request, item_pk):
     )
     return JsonResponse({'payment_intent': payment_intent})
 
+
 def checkout(request):
     """
         Отображает страницу оформления заказа, на которой пользователь может выбрать товары для покупки.
@@ -92,6 +88,7 @@ def checkout(request):
     items = Item.objects.all()
     return render(request, 'checkout.html', {'items': items})
 
+
 def success(request):
     """
         Отображает страницу успешной оплаты.
@@ -101,6 +98,7 @@ def success(request):
         Возвращает HttpResponse объект со страницей успешной оплаты.
         """
     return render(request, 'success.html')
+
 
 def cancel(request):
     """
@@ -112,6 +110,7 @@ def cancel(request):
         """
     return render(request, 'cancel.html')
 
+
 def item(request, item_pk):
     """
         Отображает страницу товара с указанным primary key.
@@ -122,7 +121,10 @@ def item(request, item_pk):
         Возвращает HttpResponse объект со страницей товара.
         """
     item = get_object_or_404(Item, pk=item_pk)
-    return render(request, 'item.html', {'item': item, "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY})
+    return render(
+        request, 'item.html', {
+            'item': item, "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY})
+
 
 def create_order(request):
     """
@@ -138,18 +140,22 @@ def create_order(request):
             items = Item.objects.filter(pk__in=selected_item_ids)
             currencies = set(item.currency for item in items)
             if len(currencies) > 1:
-                return JsonResponse({'error_message': 'Выбранные продукты используют разные валюты'}, status=422)
+                return JsonResponse(
+                    {'error_message': 'Выбранные продукты используют разные валюты'}, status=422)
 
             total_price = sum(item.price for item in items)
             discounted_price = sum(item.discounted_price() for item in items)
 
-            order = Order(total_price=total_price, discounted_price=discounted_price)
+            order = Order(
+                total_price=total_price,
+                discounted_price=discounted_price)
             order.save()
             order.items.set(items)
 
             return JsonResponse({'order_id': order.pk})
         else:
-            return JsonResponse({'error_message':"Выберите продукты для создания заказа"}, status=422)
+            return JsonResponse(
+                {'error_message': "Выберите продукты для создания заказа"}, status=422)
     except ValueError as e:
         return JsonResponse({'error_message': e}, status=500)
 
@@ -169,7 +175,7 @@ def get_order(request, order_pk):
         total_price += item.total()
     context = {
         'items': order.items.all(),
-        'amount': int(order.total_price/100),
+        'amount': int(order.total_price / 100),
         'total': total_price,
         'order': order,
         "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY
