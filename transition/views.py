@@ -7,7 +7,6 @@ from django.http import JsonResponse
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
-YOUR_DOMAIN = "http://127.0.0.1:8000"
 
 
 def buy_order(request, order_pk):
@@ -41,8 +40,8 @@ def buy_order(request, order_pk):
             "product_id": int(order.id),
         },
         mode='payment',
-        success_url=YOUR_DOMAIN + '/success/',
-        cancel_url=YOUR_DOMAIN + '/cancel/',
+        success_url=request.build_absolute_uri('/') + 'success/',
+        cancel_url=request.build_absolute_uri('/') + 'cancel/',
     )
     return JsonResponse({'session_id': checkout_session.id})
 
