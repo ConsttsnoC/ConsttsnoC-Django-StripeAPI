@@ -21,7 +21,7 @@ STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 
 # Application definition
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['stripeapi.pythonanywhere.com','localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
