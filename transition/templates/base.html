@@ -10,27 +10,42 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{% url 'checkout' %}">Интернет-магазин</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'checkout' %}">Каталог</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://www.gilmanov.net/">О нас</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://www.gilmanov.net/static/portfolio/res.ko.pdf">Контакты</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'checkout' %}">Интернет-магазин</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'checkout' %}">Каталог</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://www.gilmanov.net/">О нас</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://www.gilmanov.net/static/portfolio/res.ko.pdf">Контакты</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 </header>
+
+<script>
+  // Находим элементы, которые будут изменяться при клике на кнопку
+  const navbarCollapse = document.querySelector('.navbar-collapse');
+  const navbarToggler = document.querySelector('.navbar-toggler');
+
+  // Добавляем обработчик события клика на кнопку навбара
+  navbarToggler.addEventListener('click', () => {
+    if (navbarCollapse.style.display === 'block') {
+      navbarCollapse.style.display = 'none';
+    } else {
+      navbarCollapse.style.display = 'block';
+    }
+  });
+</script>
 {% block content %} {% endblock %}
 <footer class="fixed-bottom">
     <div class="container">
